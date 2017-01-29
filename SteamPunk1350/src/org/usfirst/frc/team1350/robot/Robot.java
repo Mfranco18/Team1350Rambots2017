@@ -3,15 +3,25 @@
 
 package org.usfirst.frc.team1350.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team1350.robot.subsystems.DriveTrain;
+//for the ahrs 
+import edu.wpi.first.wpilibj.SerialPort;
 
 import org.usfirst.frc.team1350.robot.commands.ExampleCommand;
 import org.usfirst.frc.team1350.robot.subsystems.ExampleSubsystem;
+
+import com.kauailabs.navx.frc.AHRS;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +34,16 @@ public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
+	public static DriveTrain drivetrain;
+	
+	//Declares the nav-x micro as a ahrs
+	AHRS ahrs;
 
+	//Camera- 2016 definition 
+	//CameraServer server;
+	//Camera
+	UsbCamera server;
+	
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -38,6 +57,25 @@ public class Robot extends IterativeRobot {
 		chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
+		
+		// activates the drive train 
+		drivetrain = DriveTrain.getInstance();
+		drivetrain.init();
+		
+		//This sets up the camera as a usb camera so it can be rocognized from the driver station 
+		server = CameraServer.getInstance().startAutomaticCapture();
+		
+		
+		
+		 try {
+		        /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
+		        /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
+		        /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
+		        ahrs = new AHRS(SerialPort.Port.kUSB); 
+		    } catch (RuntimeException ex ) {
+		        DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+		    }
+		  
 	}
 
 	/**
@@ -106,6 +144,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		boolean motionDetected = ahrs.isMoving();
+        SmartDashboard.putBoolean("DB/LED 0", motionDetected);
 	}
 
 	/**
