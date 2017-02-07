@@ -1,4 +1,4 @@
-// Marco Franco 2017
+// Marco Franco 2017 
 
 package org.usfirst.frc.team1350.robot;
 
@@ -31,7 +31,8 @@ public class OI {
 	public Button JoyLeftTrigger = new JoystickButton(leftStick, 1);
 	public Joystick rightStick = new Joystick(2);
 	public Button JoyRightTrigger = new JoystickButton(rightStick, 1);
-	
+	public Joystick XboxControllerLeft = new Joystick(3);
+	//public XboxController cont = new Joystick(3);
 	
 	
 	//// CREATING BUTTONS

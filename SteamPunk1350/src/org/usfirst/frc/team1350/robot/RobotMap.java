@@ -9,12 +9,16 @@ package org.usfirst.frc.team1350.robot;
 public class RobotMap {
 	
 	//Motor Controllers
-	public static final int leftMotorController = 1;
 	public static final int rightMotorController = 0;
+	public static final int leftMotorController = 1;
+	public static final int climberMotorController = 2; 
 	
 	//JoySticks
-	public static final int left_Joystick = 1;
 	public static final int right_Joystick = 0; 
+	public static final int left_Joystick = 1;
+	public static final int XboxController = 2; 
+	
+	
 	
 	
 	// For example to map the left and right motors, you could define the

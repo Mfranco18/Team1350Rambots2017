@@ -12,9 +12,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team1350.robot.subsystems.Climber;
 import org.usfirst.frc.team1350.robot.subsystems.DriveTrain;
 //for the ahrs 
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.XboxController;
 
 import org.usfirst.frc.team1350.robot.commands.ExampleCommand;
 import org.usfirst.frc.team1350.robot.subsystems.ExampleSubsystem;
@@ -35,6 +38,7 @@ public class Robot extends IterativeRobot {
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 	public static DriveTrain drivetrain;
+	public static Climber climber;
 	
 	//Declares the nav-x micro as a ahrs
 	AHRS ahrs;
@@ -62,8 +66,14 @@ public class Robot extends IterativeRobot {
 		drivetrain = DriveTrain.getInstance();
 		drivetrain.init();
 		
+		
+		// activates the lifter, it waits until the two triggers are pulled 
+		climber = Climber.getInstance();
+		climber.init();
+		
+		
 		//This sets up the camera as a usb camera so it can be rocognized from the driver station 
-		server = CameraServer.getInstance().startAutomaticCapture();
+		//server = CameraServer.getInstance().startAutomaticCapture();
 		
 		
 		
@@ -145,7 +155,10 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		boolean motionDetected = ahrs.isMoving();
+		
         SmartDashboard.putBoolean("DB/LED 0", motionDetected);
+        //SmartDashboard.putString("DB/String 5", "Controller " + OI.getInstance().XboxController.getY());
+        
 	}
 
 	/**
