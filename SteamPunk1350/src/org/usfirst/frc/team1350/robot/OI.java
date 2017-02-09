@@ -28,11 +28,15 @@ public class OI {
 	//public Joystick leftStick;
 	//public Joystick rightStick;
 	public Joystick leftStick = new Joystick(1);
-	public Button JoyLeftTrigger = new JoystickButton(leftStick, 1);
+	public Button solenoidSwitch = new JoystickButton(leftStick, 1);
+	
 	public Joystick rightStick = new Joystick(2);
 	public Button JoyRightTrigger = new JoystickButton(rightStick, 1);
+	
 	public Joystick XboxControllerLeft = new Joystick(3);
-	//public XboxController cont = new Joystick(3);
+	
+	//JoyLeftTrigger.whenPressed(new TankDrive.switchGear()));
+	//JoyLeftTrigger.
 	
 	
 	//// CREATING BUTTONS

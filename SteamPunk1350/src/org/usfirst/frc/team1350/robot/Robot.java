@@ -19,8 +19,6 @@ import org.usfirst.frc.team1350.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.XboxController;
 
-import org.usfirst.frc.team1350.robot.commands.ExampleCommand;
-import org.usfirst.frc.team1350.robot.subsystems.ExampleSubsystem;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -35,7 +33,6 @@ import com.kauailabs.navx.frc.AHRS;
  */
 public class Robot extends IterativeRobot {
 
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 	public static DriveTrain drivetrain;
 	public static Climber climber;
@@ -58,7 +55,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void robotInit() {
 		oi = new OI();
-		chooser.addDefault("Default Auto", new ExampleCommand());
+		//chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
 		
@@ -117,6 +114,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		autonomousCommand = chooser.getSelected();
+		
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -156,7 +154,7 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		boolean motionDetected = ahrs.isMoving();
 		
-        SmartDashboard.putBoolean("DB/LED 0", motionDetected);
+        SmartDashboard.putBoolean("DB/LED 0", true);
         //SmartDashboard.putString("DB/String 5", "Controller " + OI.getInstance().XboxController.getY());
         
 	}
