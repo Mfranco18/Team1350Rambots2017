@@ -13,8 +13,14 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team1350.robot.commands.autonomousCommand;
 import org.usfirst.frc.team1350.robot.subsystems.Climber;
 import org.usfirst.frc.team1350.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team1350.robot.subsystems.Intake;
+//import org.usfirst.frc.team1350.robot.subsystems.Intake;
+import org.usfirst.frc.team1350.robot.subsystems.NavxMicro;
+import org.usfirst.frc.team1350.robot.subsystems.ObjectIdentification;
+
 //for the ahrs 
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.XboxController;
@@ -36,16 +42,15 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static DriveTrain drivetrain;
 	public static Climber climber;
+	public static NavxMicro navX;
+	public static Intake intake;
 	
-	//Declares the nav-x micro as a ahrs
-	AHRS ahrs;
-
-	//Camera- 2016 definition 
-	//CameraServer server;
-	//Camera
-	UsbCamera server;
 	
-	Command autonomousCommand;
+	
+	//Command autonomousCommand;
+	Command autoComm;
+	
+	
 	SendableChooser<Command> chooser = new SendableChooser<>();
 
 	/**
@@ -68,20 +73,24 @@ public class Robot extends IterativeRobot {
 		climber = Climber.getInstance();
 		climber.init();
 		
+		//initialized the nav-x micro
+		navX = NavxMicro.getInstance();
+		navX.init();
+		
+		//initializing the camera 
+		ObjectIdentification.init();
+		
+		
+		//initialize the intake 
+		intake = Intake.getInstance();
+		intake.init();
 		
 		//This sets up the camera as a usb camera so it can be rocognized from the driver station 
 		//server = CameraServer.getInstance().startAutomaticCapture();
 		
 		
 		
-		 try {
-		        /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
-		        /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
-		        /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
-		        ahrs = new AHRS(SerialPort.Port.kUSB); 
-		    } catch (RuntimeException ex ) {
-		        DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
-		    }
+		
 		  
 	}
 
@@ -113,9 +122,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		autonomousCommand = chooser.getSelected();
+		SmartDashboard.putString("DB/String 6", "auto is started1");
+		//autonomousCommand = chooser.getSelected();
+		autoComm = new autonomousCommand();
 		
-
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -124,8 +134,9 @@ public class Robot extends IterativeRobot {
 		 */
 
 		// schedule the autonomous command (example)
-		if (autonomousCommand != null)
-			autonomousCommand.start();
+		if (autoComm != null)
+			autoComm.start();
+		    SmartDashboard.putString("DB/String 6", "auto is started1");
 	}
 
 	/**
@@ -142,8 +153,8 @@ public class Robot extends IterativeRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (autonomousCommand != null)
-			autonomousCommand.cancel();
+		if (autoComm != null)
+			autoComm.cancel();
 	}
 
 	/**
@@ -152,11 +163,10 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		boolean motionDetected = ahrs.isMoving();
 		
-        SmartDashboard.putBoolean("DB/LED 0", true);
-        //SmartDashboard.putString("DB/String 5", "Controller " + OI.getInstance().XboxController.getY());
-        
+		//practice
+		SmartDashboard.putString("DB/String 1", "heading = " + NavxMicro.getInstance().getHeading());
+		
 	}
 
 	/**

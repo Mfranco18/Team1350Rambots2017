@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Climber extends Subsystem {
 
-	//called by the TeleOpDriveTrain to notify what the commands class requires 
+	//called by the ClimberControl to notify what the commands class requires 
     private static Climber instance;
     public static Climber getInstance(){
 		if (instance==null){

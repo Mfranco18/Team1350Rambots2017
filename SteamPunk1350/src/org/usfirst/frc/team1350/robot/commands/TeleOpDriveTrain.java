@@ -3,6 +3,7 @@ package org.usfirst.frc.team1350.robot.commands;
 //import org.usfirst.frc.team1350.robot.Log;
 import org.usfirst.frc.team1350.robot.OI;
 import org.usfirst.frc.team1350.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team1350.robot.subsystems.NavxMicro;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,9 +41,16 @@ public class TeleOpDriveTrain extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	//changed to two lefts 
-    	DriveTrain.getInstance().tankDrive(getLeftStick(), getRightStick(), squaredInputs);
-    	SmartDashboard.putString("DB/LED 0", "TeleOpDrive is init");
+    
+    	
+    	//checks to see if the trigger is pressed, and sends diff variables accordingly 
+    	
+    	if(DriveTrain.getInstance().orientationTriggerGet()){
+    		DriveTrain.getInstance().tankDrive(-getRightStick(), -getLeftStick(), squaredInputs);
+    	} else {
+    		DriveTrain.getInstance().tankDrive(getLeftStick(), getRightStick(), squaredInputs);
+    	}
+    	
     }
 
     // Make this return true when this Command no longer needs to run execute()

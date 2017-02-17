@@ -51,8 +51,16 @@ public class DriveTrain extends Subsystem {
 	DoubleSolenoid leftSolenoid; 
 	DoubleSolenoid rightSolenoid;
 	Trigger solenoidSwitchLeft, solenoidSwitchRight;
+	
+	Trigger gearForwardDrive, gearBackDrive;
 	//private Command switchDriveGear; 
 	 
+	//variables for the autoDrive
+	double autoSpeed = 0.5;
+	double autoCurve = 0.0;
+	
+	//timer 
+	Timer timer = new Timer();  
 	
 	
 	public DriveTrain(){
@@ -61,6 +69,8 @@ public class DriveTrain extends Subsystem {
 	}
 	
 	public void init(){
+		
+		//declarations for the drive system 
 		tankDrive =TeleOpDriveTrain.getInstance();
 		leftMotorController = new VictorSP(RobotMap.rightMotorController);
 		rightMotorController = new VictorSP(RobotMap.leftMotorController); 
@@ -79,13 +89,59 @@ public class DriveTrain extends Subsystem {
 		solenoidSwitchRight = new JoystickButton(OI.getInstance().leftStick, 1);
 		solenoidSwitchLeft = new JoystickButton(OI.getInstance().rightStick, 1);
 		
+		//switching the robots orientation 
+		gearForwardDrive =  new JoystickButton(OI.getInstance().leftStick, 3);
+		gearBackDrive =  new JoystickButton(OI.getInstance().leftStick, 2);
+		
 		
 	}
 	
-	public void tankDrive(double left, double right, boolean squaredInputs){
+	public void tankDrive(double left, double right, boolean squaredInputs){  
+		
+		//gearForwardDrive.whenActive(driveReverse(left, right, false));
+		/*if(gearForwardDrive.get()){ 
+			robotDrive.tankDrive(-right, -left, false);
+		}
+		*/
+		//gearForwardDrive.whenInactive(driveNormal(left, right, false));
 		robotDrive.tankDrive(left, right, false);
+		
+		
+		compressorOn();
+		
+		switchSolenoid();
+		
+		boolean buttonValue = SmartDashboard.getBoolean("DB/Button 1", false); 
+		
+		
+				
+		if (buttonValue){
+			//autoDrive(autoSpeed, autoCurve); 
+			
+		}
+	}
+	
+	
+	
+	private Command driveNormal(double left, double right, boolean b) {
+		robotDrive.tankDrive(left, right, false);
+		return null;
+	}
+
+	private Command driveReverse(double left, double right, boolean temp) {
+		robotDrive.tankDrive(-right, -left, false);
+		return null;
+	}
+
+
+	//monitors the compressor for the rest of the match
+	private void compressorOn() {
 		compressor.setClosedLoopControl(true);
 		
+	}
+
+	//on the triggers of the two main joysticks, allows to shift up and down 
+	private void switchSolenoid() {
 		if(solenoidSwitchRight.get()){
 			leftSolenoid.set(DoubleSolenoid.Value.kForward);
 			rightSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -95,13 +151,58 @@ public class DriveTrain extends Subsystem {
 			leftSolenoid.set(DoubleSolenoid.Value.kReverse);
 			rightSolenoid.set(DoubleSolenoid.Value.kReverse);
 		}
+	}
+	
+	public void testMotors(){
 		
+	}
+
+	public void AutoTurn(double speed, double curve){
+		robotDrive.tankDrive(0, -0.5);
+	}
+	
+	//does not work 
+	public void autoDrive(double speed, double curve){
+		//wrks for 0.25 speed 
+		//robotDrive.drive(speed, 0.025);
+		
+		robotDrive.drive(speed, 0.009);
+		
+		
+		/*
+		 
+		//robotDrive.tankDrive(speed, speed, false);
+		//driveRightMotor(1,2);
+		//driveLeftMotor(1,2);
+	
+		rightMotorController.set(-0.25);
+		leftMotorController.set(0.25);
+		
+		
+		
+		
+		
+		//rightMotorController.set(0);
+		//leftMotorController.set(0);
+		
+		//driveRightMotor(0,2);
+		//driveLeftMotor(0,2);
+		//robotDrive.tankDrive(0, 0, false);
+		
+		if (iterations > 10000000){
+			robotDrive.tankDrive(0.25, -0.25);
+			SmartDashboard.putString("DB/String 2", "iterations " + iterations);
+			return false;
+		} else{
+			return true;
+		}
+		
+		*/
 		
 	}
 	
-	public void autoDrive(double speed, double curve){
-		robotDrive.drive(speed, curve);
-	}
+	
+	
 	
 	public void driveLeftMotor(double speed, double time){
 		leftMotorController.set(speed);
@@ -113,6 +214,13 @@ public class DriveTrain extends Subsystem {
 		rightMotorController.set(speed);
 		Timer.delay(time);
 		rightMotorController.set(0);
+	}
+
+	
+	//allows the driver to switch the orientation of the robot 
+	public boolean orientationTriggerGet() {
+		
+		return gearForwardDrive.get();
 	}
 	
 	
