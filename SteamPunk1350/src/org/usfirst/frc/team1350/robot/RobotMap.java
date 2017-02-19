@@ -15,6 +15,8 @@ public class RobotMap {
 	public static final int leftMotorController = 1;
 	public static final int climberMotorController = 2;
 	public static final int intakeMotor = 3; 
+	public static final int shootingMotorController = 4;
+	public static final int shooterKickerMotorController = 5;
 	
 	
 	// Inputs 

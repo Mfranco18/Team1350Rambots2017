@@ -1,3 +1,5 @@
+//first run of the vision code
+
 package org.usfirst.frc.team1350.robot.subsystems;
 
 import java.util.ArrayList;
@@ -30,6 +32,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class VisionCode extends Subsystem {
 
 	Thread visionThread;
+	
+	private double PegX;
+	
+	private double[] boxXDim = new double[1];
 	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -138,6 +144,9 @@ public class VisionCode extends Subsystem {
     					//distances = new double[2];
     					distances[i] = distanceH;
     					
+    					//put the x dimmension of the rectangle into an array
+    					boxXDim[i] = bb.x + 0.5*(bb.width);
+    					
     					
     					if (i ==0){
     						//int height = bb.height;
@@ -156,8 +165,14 @@ public class VisionCode extends Subsystem {
     					
     				}
     				
+    				for (int j = 0; j < 2; j++ ){
+    					PegX += boxXDim[j];
+    				}
+    				
+    				PegX = PegX/2;
+    				
     				// Give the output stream a new image to display
-    				outputStream.putFrame(mat);
+    				//outputStream.putFrame(mat);
     				
     			}
     		});
@@ -257,6 +272,7 @@ private void filterContours(List<MatOfPoint> inputContours, double minArea,
 		output.add(contour);
 	}
 }
+
 
 }
 

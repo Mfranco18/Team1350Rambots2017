@@ -4,6 +4,7 @@ package org.usfirst.frc.team1350.robot.commands;
 import org.usfirst.frc.team1350.robot.OI;
 import org.usfirst.frc.team1350.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1350.robot.subsystems.NavxMicro;
+import org.usfirst.frc.team1350.robot.subsystems.Vision;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,13 +43,14 @@ public class TeleOpDriveTrain extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     
+    	SmartDashboard.putString("DB/String 0", "Vision was reached = " + Vision.getInstance().reached());
     	
     	//checks to see if the trigger is pressed, and sends diff variables accordingly 
     	
     	if(DriveTrain.getInstance().orientationTriggerGet()){
-    		DriveTrain.getInstance().tankDrive(-getRightStick(), -getLeftStick(), squaredInputs);
+    		DriveTrain.getInstance().tankDrive(getRightStick(), getLeftStick(), squaredInputs);
     	} else {
-    		DriveTrain.getInstance().tankDrive(getLeftStick(), getRightStick(), squaredInputs);
+    		DriveTrain.getInstance().tankDrive(-getLeftStick(), -getRightStick(), squaredInputs);
     	}
     	
     }

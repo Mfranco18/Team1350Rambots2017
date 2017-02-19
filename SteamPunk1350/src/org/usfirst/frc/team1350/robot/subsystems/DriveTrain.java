@@ -7,6 +7,7 @@ import org.usfirst.frc.team1350.robot.commands.TeleOpDriveTrain;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -47,9 +48,12 @@ public class DriveTrain extends Subsystem {
 	private TeleOpDriveTrain tankDrive;
 	//compressor 
 	private Compressor compressor;
-	//solenoids
+	//solenoids for practice bot
 	DoubleSolenoid leftSolenoid; 
 	DoubleSolenoid rightSolenoid;
+	
+	//solenoids for the game bot
+	Solenoid firstLeft, firstRight, secondLeft, secondRight;
 	Trigger solenoidSwitchLeft, solenoidSwitchRight;
 	
 	Trigger gearForwardDrive, gearBackDrive;
@@ -80,14 +84,28 @@ public class DriveTrain extends Subsystem {
 		compressor = new Compressor(RobotMap.Compressor);
 		compressor.setClosedLoopControl(false);
 		
-		//solenoid 
+		/*
+		//solenoid for practice 
 		leftSolenoid = new DoubleSolenoid(0, 1);
 		leftSolenoid.set(DoubleSolenoid.Value.kOff);
 		rightSolenoid = new DoubleSolenoid(2, 3);
 		rightSolenoid.set(DoubleSolenoid.Value.kOff);
-		
+		*/
 		solenoidSwitchRight = new JoystickButton(OI.getInstance().leftStick, 1);
 		solenoidSwitchLeft = new JoystickButton(OI.getInstance().rightStick, 1);
+		
+		//solenoids for competition
+		firstLeft = new Solenoid(0);
+		firstLeft.set(false);
+		secondLeft = new Solenoid(1);
+		secondLeft.set(false);
+		firstRight = new Solenoid(2); 
+		firstRight.set(true);
+		secondRight = new Solenoid(3); 
+		secondRight.set(true);
+		
+		
+		
 		
 		//switching the robots orientation 
 		gearForwardDrive =  new JoystickButton(OI.getInstance().leftStick, 3);
@@ -143,13 +161,36 @@ public class DriveTrain extends Subsystem {
 	//on the triggers of the two main joysticks, allows to shift up and down 
 	private void switchSolenoid() {
 		if(solenoidSwitchRight.get()){
+			/*
+			//for the practice bot
 			leftSolenoid.set(DoubleSolenoid.Value.kForward);
 			rightSolenoid.set(DoubleSolenoid.Value.kForward);
+			*/
+			
+			//for the real bot 
+			firstLeft.set(false);
+			secondLeft.set(false);
+			
+			firstRight.set(true);
+			secondRight.set(true);
 		}
 		
 		if(solenoidSwitchLeft.get()){
+			/*
+			//for the practice bot 
 			leftSolenoid.set(DoubleSolenoid.Value.kReverse);
 			rightSolenoid.set(DoubleSolenoid.Value.kReverse);
+			*/
+			
+			//for the real bot 
+			firstRight.set(false);
+			secondRight.set(false);
+			
+			firstLeft.set(true);
+			secondLeft.set(true);
+			
+			
+			
 		}
 	}
 	

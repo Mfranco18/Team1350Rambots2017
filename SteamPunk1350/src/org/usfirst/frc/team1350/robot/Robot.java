@@ -20,6 +20,7 @@ import org.usfirst.frc.team1350.robot.subsystems.Intake;
 //import org.usfirst.frc.team1350.robot.subsystems.Intake;
 import org.usfirst.frc.team1350.robot.subsystems.NavxMicro;
 import org.usfirst.frc.team1350.robot.subsystems.ObjectIdentification;
+import org.usfirst.frc.team1350.robot.subsystems.Vision;
 
 //for the ahrs 
 import edu.wpi.first.wpilibj.SerialPort;
@@ -44,6 +45,7 @@ public class Robot extends IterativeRobot {
 	public static Climber climber;
 	public static NavxMicro navX;
 	public static Intake intake;
+	public static Vision camera;
 	
 	
 	
@@ -84,6 +86,10 @@ public class Robot extends IterativeRobot {
 		//initialize the intake 
 		intake = Intake.getInstance();
 		intake.init();
+		
+		//initialize the camera to put a image on the dashboard
+		camera = Vision.getInstance();
+		camera.init();
 		
 		//This sets up the camera as a usb camera so it can be rocognized from the driver station 
 		//server = CameraServer.getInstance().startAutomaticCapture();

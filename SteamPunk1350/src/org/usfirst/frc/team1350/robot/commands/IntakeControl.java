@@ -1,8 +1,12 @@
 package org.usfirst.frc.team1350.robot.commands;
 
+import org.usfirst.frc.team1350.robot.OI;
 import org.usfirst.frc.team1350.robot.subsystems.Climber;
 import org.usfirst.frc.team1350.robot.subsystems.Intake;
 
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -23,7 +27,7 @@ public class IntakeControl extends Command {
 	//define variables
 	private boolean squaredInputs;
 	private final static double speed = 1;
-	
+	private Trigger XboxButtonIntake; 
 	
     public IntakeControl() {
         // Use requires() here to declare subsystem dependencies
@@ -34,13 +38,15 @@ public class IntakeControl extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	squaredInputs = false;
+    	XboxButtonIntake = new JoystickButton(OI.getInstance().XboxControllerLeft, 1); 
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
     	
-    	if (SmartDashboard.getBoolean("DB/Button 3", false)){
+    	//if (SmartDashboard.getBoolean("DB/Button 3", false)){
+    	if (XboxButtonIntake.get()){
     		Intake.getInstance().tankDrive(speed, speed, squaredInputs);
     	}
     	
