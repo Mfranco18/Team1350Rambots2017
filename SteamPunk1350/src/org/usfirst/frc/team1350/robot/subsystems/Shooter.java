@@ -1,9 +1,7 @@
-//working on the correct input
-
 package org.usfirst.frc.team1350.robot.subsystems;
 
 import org.usfirst.frc.team1350.robot.RobotMap;
-import org.usfirst.frc.team1350.robot.commands.IntakeControl;
+import org.usfirst.frc.team1350.robot.commands.ShooterControl;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -12,26 +10,26 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class Intake extends Subsystem {
+public class Shooter extends Subsystem {
 
-	private static Intake instance;
+	private static Shooter instance;
 
-	public static Intake getInstance() {
+	public static Shooter getInstance() {
 		if (instance == null) {
-			instance = new Intake();
+			instance = new Shooter();
 		}
 		return instance;
 	}
 
 	// Declaring the motor controllers
-	private VictorSP intakeMotorController;
+	private VictorSP shooterMotorController;
 	private RobotDrive robotDrive;
-	private IntakeControl tankDrive;
+	private ShooterControl tankDrive;
 
 	public void init() {
-		tankDrive = IntakeControl.getInstance();
-		intakeMotorController = new VictorSP(RobotMap.intakeMotor);
-		robotDrive = new RobotDrive(intakeMotorController, intakeMotorController);
+		tankDrive = ShooterControl.getInstance();
+		shooterMotorController = new VictorSP(RobotMap.shootingMotorController);
+		robotDrive = new RobotDrive(shooterMotorController, shooterMotorController);
 	}
 
 	public void tankDrive(double left, double right, boolean squaredInputs) {
@@ -39,9 +37,9 @@ public class Intake extends Subsystem {
 	}
 
 	public void driveLeftMotor(double speed, double time) {
-		intakeMotorController.set(speed);
+		shooterMotorController.set(speed);
 		// Timer.delay(time);
-		intakeMotorController.set(0);
+		shooterMotorController.set(0);
 	}
 
 	// Put methods for controlling this subsystem

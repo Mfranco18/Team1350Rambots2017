@@ -7,14 +7,14 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class autonomousCommand extends CommandGroup {
 
-    public autonomousCommand() {
-        addSequential(new AutoDrive());
-    	addSequential(new AutoTurn());
-    	addSequential(new VisionPlaceGear());
-    }
-    
-    public void autoComm(){
-    	//addSequential(new AutoDrive());
-    	addSequential(new AutoTurn());
-    }
+	public autonomousCommand() {
+		// addSequential(new AutoDrive());
+		// addSequential(new AutoTurn());
+		addSequential(new AutoGear());
+	}
+
+	public void autoComm() {
+		// addSequential(new AutoDrive());
+		addSequential(new AutoTurn());
+	}
 }
