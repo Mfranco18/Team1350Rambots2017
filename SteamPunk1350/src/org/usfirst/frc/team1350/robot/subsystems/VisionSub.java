@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1350.robot.commands;
+package org.usfirst.frc.team1350.robot.subsystems;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,83 +14,95 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.usfirst.frc.team1350.robot.subsystems.DriveTrain;
-//import org.usfirst.frc.team1350.robot.subsystems.VisionSub;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
  */
-public class AutoGear extends Command {
+public class VisionSub extends Subsystem {
 
 	private DriveTrain drivetrain;
 
-	static boolean done;
+	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
 
-	CvSink cvSink;
-	CvSource outputStream;
-	Mat mat;
+	public void initDefaultCommand() {
+		// Set the default command for a subsystem here.
+		// setDefaultCommand(new MySpecialCommand());
+	}
 
-	int diff = 0;
-	int prevDiff = 0;
-	MatOfPoint thisContour;
-	int counter;
+	private static VisionSub instance;
+
+	public static VisionSub getInstance() {
+		if (instance == null) {
+			instance = new VisionSub();
+		}
+		return instance;
+	}
+
+	// Thread visionThread;
 
 	private Mat hslThresholdOutput = new Mat();
 	private Mat hsvThresholdOutput = new Mat();
 	private ArrayList<MatOfPoint> findContoursOutput = new ArrayList<MatOfPoint>();
 	private ArrayList<MatOfPoint> filterContoursOutput = new ArrayList<MatOfPoint>();
 
-	public AutoGear() {
-		// Use requires() here to declare subsystem dependencies
-		// eg. requires(chassis);
-		requires(DriveTrain.getInstance());
+	// double[] center = new double[2];
+	// int xCor = 0;
+
+	public boolean process() {
+
+		// RobotDrive myRobot;
+		// myRobot = new RobotDrive(0, 1);
+
 		drivetrain = DriveTrain.getInstance();
-	}
 
-	// Called just before this Command runs the first time
-	protected void initialize() {
+		// visionThread = new Thread(() -> {
 
-		SmartDashboard.putString("DB/String 0", "");
-		SmartDashboard.putString("DB/String 1", "");
-		SmartDashboard.putString("DB/String 2", "");
-		SmartDashboard.putString("DB/String 3", "");
-		SmartDashboard.putString("DB/String 4", "");
-		SmartDashboard.putString("DB/String 5", "");
-		SmartDashboard.putString("DB/String 6", "");
-		SmartDashboard.putString("DB/String 7", "");
-		SmartDashboard.putString("DB/String 8", "");
-		SmartDashboard.putString("DB/String 9", "");
+		int diff = 0;
+		int prevDiff = 0;
 
-		counter = 0;
+		MatOfPoint thisContour;
 
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+
+		// Get the UsbCamera from CameraServer
+		// UsbCamera camera =
+		CameraServer.getInstance().startAutomaticCapture();
+		// Set the resolution
 		camera.setResolution(640, 480);
-		camera.setExposureManual(20);
+		// int dashData0 = (int) SmartDashboard.getNumber("DB/Slider 0",
+		// 0.0);
+		// camera.setExposureManual(dashData0);
+		// int dashData0 = (int) SmartDashboard.getNumber("DB/Slider 0",
+		// 0.0);
+		camera.setExposureManual(80);
 
 		// Get a CvSink. This will capture Mats from the camera
-		cvSink = CameraServer.getInstance().getVideo();
+		CvSink cvSink = CameraServer.getInstance().getVideo();
 		// Setup a CvSource. This will send images back to the Dashboard
-		outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
+		CvSource outputStream = CameraServer.getInstance().putVideo("Rectangle", 640, 480);
 
 		// Mats are very memory expensive. Lets reuse this Mat.
-		mat = new Mat();
+		Mat mat = new Mat();
 
-		setTimeout(15);
-		done = false;
-		// pegPoint = 0;
+		int j = 0;
+		// This cannot be 'true'. The program will never exit if it is.
+		// This
+		// lets the robot stop this thread when restarting robot code or
+		// deploying.
+		// while (!Thread.interrupted()) {
 
-	}
-
-	// Called repeatedly when this Command is scheduled to run
-	protected void execute() {
-
+		// Tell the CvSink to grab a frame from the camera and put
+		// it
+		// in the source mat. If there is an error notify the
+		// output.
 		if (cvSink.grabFrame(mat) == 0) {
 			// Send the output the error.
 			outputStream.notifyError(cvSink.getError());
@@ -255,23 +267,23 @@ public class AutoGear extends Command {
 		// Timer.delay(0.2);
 
 		if (diff > 30) {
-			speedL = -0.1;
-			speedR = 0.1;
+			speedL = -0.3;
+			speedR = 0.3;
 		} else if (diff < -30) {
-			speedL = 0.1;
-			speedR = -0.1;
+			speedL = 0.3;
+			speedR = -0.3;
 		} else {
 			if (distanceH < 20) {
 				speedL = 0;
 				speedR = 0;
 			} else if (distanceH > 50) {
-				speedL = 0.3;
-				speedR = 0.3;
+				speedL = 0.5;
+				speedR = 0.5;
 			} else {
 				// speedL = 0.5 / 35 * distanceH - 0.3;
 				// speedR = 0.5 / 35 * distanceH - 0.3;
-				speedL = 0.3;
-				speedR = 0.3;
+				speedL = 0.5;
+				speedR = 0.5;
 			}
 		}
 
@@ -292,42 +304,30 @@ public class AutoGear extends Command {
 
 		// myRobot.tankDrive(speedL, speedR);
 
-		// if (distanceH > 15) {
-		// speedL = 0.3;
-		// }
-		//
-		// if (diff > 20 || diff < -20) {
-		// speedR = diff / 1000;
-		// speedL = 0;
-		// }
+		if (distanceH > 15) {
+			speedL = 0.3;
+		}
 
-		DriveTrain.getInstance().tankDrive(speedL, speedR, false);
+		if (diff > 20 || diff < -20) {
+			speedR = diff / 1000;
+			speedL = 0;
+		}
+
+		DriveTrain.getInstance().autoDrive(speedL, speedR);
 
 		SmartDashboard.putString("DB/String 1", "num  rect = " + filterContoursOutput.size());
-
 		outputStream.putFrame(mat);
+		if ((diff < 20 && diff > -20) && distanceH < 20) {
+			return false;
+		} else {
+			return true;
+		}
 
-		SmartDashboard.putString("DB/String 1", "counter " + counter);
-		counter++;
-
-		// SmartDashboard.putString("DB/String 9", "Peg Pos = " + pegPoint);
-		// done = VisionSub.getInstance().process();
 	}
-
-	// Make this return true when this Command no longer needs to run execute()
-	protected boolean isFinished() {
-		return isTimedOut();
-	}
-
-	// Called once after isFinished returns true
-	protected void end() {
-		SmartDashboard.putString("DB/String 0", "this was reached");
-	}
-
-	// Called when another command which requires one or more of the same
-	// subsystems is scheduled to run
-	protected void interrupted() {
-	}
+	// });
+	// visionThread.setDaemon(true);
+	// visionThread.start();
+	// }
 
 	/**
 	 * This method is a generated getter for the output of a HSL_Threshold.

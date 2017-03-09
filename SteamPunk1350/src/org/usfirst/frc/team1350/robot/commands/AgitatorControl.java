@@ -2,7 +2,7 @@ package org.usfirst.frc.team1350.robot.commands;
 
 import org.usfirst.frc.team1350.robot.OI;
 import org.usfirst.frc.team1350.robot.RobotMap;
-import org.usfirst.frc.team1350.robot.subsystems.Shooter;
+import org.usfirst.frc.team1350.robot.subsystems.Agitator;
 
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.Trigger;
@@ -11,32 +11,32 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ShooterControl extends Command {
+public class AgitatorControl extends Command {
 
-	private static ShooterControl instance;
+	private static AgitatorControl instance;
 
-	public static ShooterControl getInstance() {
+	public static AgitatorControl getInstance() {
 		if (instance == null) {
-			instance = new ShooterControl();
+			instance = new AgitatorControl();
 		}
 		return instance;
 	}
 
 	// define variables
 	private boolean squaredInputs;
-	private final static double speed = 1;
-	private Trigger XboxButtonShooter;
+	private final static double speed = 0.3;
+	private Trigger XboxButtonKicker;
 
-	public ShooterControl() {
+	public AgitatorControl() {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		requires(Shooter.getInstance());
+		requires(Agitator.getInstance());
 	}
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		squaredInputs = false;
-		XboxButtonShooter = new JoystickButton(OI.getInstance().XboxControllerLeft, RobotMap.xboxButtonShooter);
+		XboxButtonKicker = new JoystickButton(OI.getInstance().XboxControllerLeft, RobotMap.xboxButtonKicker);
 
 	}
 
@@ -44,8 +44,8 @@ public class ShooterControl extends Command {
 	protected void execute() {
 
 		// if (SmartDashboard.getBoolean("DB/Button 3", false)){
-		if (XboxButtonShooter.get()) {
-			Shooter.getInstance().tankDrive(speed, speed, squaredInputs);
+		if (XboxButtonKicker.get()) {
+			Agitator.getInstance().tankDrive(speed, speed, squaredInputs);
 		}
 
 	}

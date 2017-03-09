@@ -83,7 +83,15 @@ public class DriveTrain extends Subsystem {
 		// compressor
 		compressor = new Compressor(RobotMap.Compressor);
 		compressor.setClosedLoopControl(false);
+		// trigger for the cmpressor with the xbox
 		compressorValueOn = new JoystickButton(OI.getInstance().XboxControllerLeft, RobotMap.xboxCompressorButtonOn);
+		// JoystickButton(OI.getInstance().XboxControllerLeft,
+		// RobotMap.xboxCompressorButtonOn);
+		// compressorValueOn = new JoystickButton(OI.getInstance().leftStick,
+		// RobotMap.leftTriggerCompOn);
+		// compressorValueOff = new JoystickButton(OI.getInstance().rightStick,
+		// RobotMap.rightTriggerCompOff);
+
 		compressorValueOff = new JoystickButton(OI.getInstance().XboxControllerLeft, RobotMap.xboxCompressorButtonOff);
 
 		/*
@@ -201,31 +209,10 @@ public class DriveTrain extends Subsystem {
 	// does not work
 	public void autoDrive(double speed, double curve) {
 		// wrks for 0.25 speed
-		// robotDrive.drive(speed, 0.025);
 
-		robotDrive.drive(speed, 0);
+		robotDrive.drive(speed, curve);
 
-		/*
-		 * 
-		 * //robotDrive.tankDrive(speed, speed, false); //driveRightMotor(1,2);
-		 * //driveLeftMotor(1,2);
-		 * 
-		 * rightMotorController.set(-0.25); leftMotorController.set(0.25);
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * //rightMotorController.set(0); //leftMotorController.set(0);
-		 * 
-		 * //driveRightMotor(0,2); //driveLeftMotor(0,2);
-		 * //robotDrive.tankDrive(0, 0, false);
-		 * 
-		 * if (iterations > 10000000){ robotDrive.tankDrive(0.25, -0.25);
-		 * SmartDashboard.putString("DB/String 2", "iterations " + iterations);
-		 * return false; } else{ return true; }
-		 * 
-		 */
+		// robotDrive.drive(speed, 0);
 
 	}
 

@@ -4,6 +4,7 @@
 package org.usfirst.frc.team1350.robot;
 
 import org.usfirst.frc.team1350.robot.commands.autonomousCommand;
+import org.usfirst.frc.team1350.robot.subsystems.Agitator;
 import org.usfirst.frc.team1350.robot.subsystems.Climber;
 import org.usfirst.frc.team1350.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team1350.robot.subsystems.Intake;
@@ -11,10 +12,9 @@ import org.usfirst.frc.team1350.robot.subsystems.Kicker;
 //import org.usfirst.frc.team1350.robot.subsystems.Kicker;
 //import org.usfirst.frc.team1350.robot.subsystems.Intake;
 import org.usfirst.frc.team1350.robot.subsystems.NavxMicro;
-//import org.usfirst.frc.team1350.robot.subsystems.Vision;
-import org.usfirst.frc.team1350.robot.subsystems.ObjectIdentification;
 //import org.usfirst.frc.team1350.robot.subsystems.Shooter;
 import org.usfirst.frc.team1350.robot.subsystems.Shooter;
+import org.usfirst.frc.team1350.robot.util.VisionThread;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -39,13 +39,18 @@ public class Robot extends IterativeRobot {
 	public static Intake intake;
 	public static Kicker kicker;
 	public static Shooter shooter;
+	public static Agitator agitator;
+	// public static Camera camera;
 
-	public static ObjectIdentification obIdentification;
+	// not sure if i should integrate the object iden into the auto class itself
+	// public static ObjectIdentification obIdentification;
 
 	// Command autonomousCommand;
 	Command autoComm;
 
 	SendableChooser<Command> chooser = new SendableChooser<>();
+
+	private VisionThread visionThread;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -71,8 +76,8 @@ public class Robot extends IterativeRobot {
 		navX.init();
 
 		// initializing the camera
-		obIdentification = ObjectIdentification.getInstance();
-		obIdentification.init();
+		// obIdentification = ObjectIdentification.getInstance();
+		// obIdentification.init();
 
 		// initialize the intake
 		intake = Intake.getInstance();
@@ -86,10 +91,20 @@ public class Robot extends IterativeRobot {
 		shooter = Shooter.getInstance();
 		shooter.init();
 
+		// initialize the Agitator
+		agitator = Agitator.getInstance();
+		agitator.init();
+
+		// initialize the camera thread
+		// camera = Camera.getInstance();
+		// camera.cameraInit();
+
 		// This sets up the camera as a usb camera so it can be rocognized from
 		// the driver station
 		// server = CameraServer.getInstance().startAutomaticCapture();
 
+		visionThread = new VisionThread();
+		visionThread.start();
 	}
 
 	/**
@@ -122,7 +137,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		SmartDashboard.putString("DB/String 6", "auto is started1");
 		// autonomousCommand = chooser.getSelected();
-		autoComm = new autonomousCommand();
+		autoComm = new autonomousCommand(visionThread);
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",

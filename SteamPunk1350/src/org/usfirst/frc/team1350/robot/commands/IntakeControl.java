@@ -24,7 +24,9 @@ public class IntakeControl extends Command {
 
 	// define variables
 	private boolean squaredInputs;
-	private final static double speed = 0.85;
+
+	// temp switch in power
+	private final static double speed = 1;
 	private Trigger XboxButtonIntake;
 
 	public IntakeControl() {
