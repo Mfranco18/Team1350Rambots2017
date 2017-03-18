@@ -46,9 +46,10 @@ public class TeleOpDriveTrain extends Command {
 		// accordingly
 
 		if (DriveTrain.getInstance().orientationTriggerGet()) {
-			DriveTrain.getInstance().tankDrive(getRightStick(), getLeftStick(), squaredInputs);
+			DriveTrain.getInstance().tankDrive(getLeftStick(), -getRightStick(), squaredInputs);
+
 		} else {
-			DriveTrain.getInstance().tankDrive(-getLeftStick(), -getRightStick(), squaredInputs);
+			DriveTrain.getInstance().tankDrive(-getRightStick(), getLeftStick(), squaredInputs);
 		}
 
 	}

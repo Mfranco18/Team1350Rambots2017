@@ -6,7 +6,7 @@ import org.usfirst.frc.team1350.robot.subsystems.NavxMicro;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class AutoDrive extends Command {
+public class AutoDrive1 extends Command {
 
 	private double speed = 0.4;
 	private double curve = -0.04;
@@ -14,9 +14,9 @@ public class AutoDrive extends Command {
 	private DriveTrain drivetrain;
 	double angle;
 	double tolerance = 3;
-	double time = 2.75;
+	double time = 2.4;
 
-	protected AutoDrive() {
+	protected AutoDrive1() {
 		requires(DriveTrain.getInstance());
 		drivetrain = DriveTrain.getInstance();
 	}

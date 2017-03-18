@@ -44,7 +44,7 @@ public class VisionThread extends Thread {
 		// int dashData0 = (int) SmartDashboard.getNumber("DB/Slider
 		// 0",
 		// 0.0);
-		camera.setExposureManual(40);
+		camera.setExposureManual(20);
 
 		// Get a CvSink. This will capture Mats from the camera
 		CvSink cvSink = CameraServer.getInstance().getVideo();
@@ -76,9 +76,9 @@ public class VisionThread extends Thread {
 
 			// Step HSV_Threshold0:
 			Mat hsvThresholdInput = mat;
-			double[] hsvThresholdHue = { 70, 101. };
-			double[] hsvThresholdSaturation = { 100, 255 };
-			double[] hsvThresholdValue = { 135, 255.0 };
+			double[] hsvThresholdHue = { 63, 97. };
+			double[] hsvThresholdSaturation = { 114, 127 };
+			double[] hsvThresholdValue = { 195, 255.0 };
 			hsvThreshold(hsvThresholdInput, hsvThresholdHue, hsvThresholdSaturation, hsvThresholdValue,
 					hsvThresholdOutput);
 

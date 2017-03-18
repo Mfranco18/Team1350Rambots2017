@@ -26,7 +26,7 @@ public class AutoPlace extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
-		time = 10;
+		time = 8;
 		setTimeout(time);
 		prevSpeedL = 0;
 		prevSpeedR = 0;
@@ -53,18 +53,21 @@ public class AutoPlace extends Command {
 		distanceH = visionThread.getDistance();
 
 		if (diff > 30) {
-			speedL = 0;
-			speedR = 0.2;
+			speedL = -0.2;
+			// speedR = 0.2;
+			speedR = 0;
 			if (diff > 80) {
-				speedR = 0.3;
+				// speedR = 0.3;
+				speedL = -0.3;
 			}
 			drivetrain.tankDrive(speedL, speedR, false);
 
 		} else if (diff < -30) {
-			speedL = 0.2;
-			speedR = 0;
+			speedL = 0;
+			speedR = -0.2;
 			if (diff < -80) {
-				speedL = 0.3;
+				// speedL = 0.3;
+				speedR = -0.3;
 			}
 			drivetrain.tankDrive(speedL, speedR, false);
 
@@ -75,13 +78,13 @@ public class AutoPlace extends Command {
 				drivetrain.tankDrive(speedL, speedR, false);
 
 			} else if (distanceH > 50) {
-				speedL = 0.3;
-				speedR = 0.3;
+				speedL = -0.3;
+				speedR = -0.3;
 				drivetrain.autoDrive(0.5, 0.05);
 			} else {
 				speedL = 0.5 / 35 * distanceH - 0.3;
 				speedR = 0.5 / 35 * distanceH - 0.3;
-				drivetrain.autoDrive(0.5, 0.05);
+				drivetrain.autoDrive(-0.5, -0.5);
 			}
 		}
 

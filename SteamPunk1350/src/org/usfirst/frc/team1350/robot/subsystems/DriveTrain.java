@@ -113,8 +113,8 @@ public class DriveTrain extends Subsystem {
 		secondRight.set(true);
 
 		// switching the robots orientation
-		gearForwardDrive = new JoystickButton(OI.getInstance().leftStick, 3);
-		gearBackDrive = new JoystickButton(OI.getInstance().leftStick, 2);
+		gearForwardDrive = new JoystickButton(OI.getInstance().leftStick, 2);
+		gearBackDrive = new JoystickButton(OI.getInstance().rightStick, 2);
 
 	}
 
